@@ -1,14 +1,48 @@
 from enum import Enum
+from typing import List
+from uuid import uuid4
 
-from fastapi import FastAPI, Request, Query, Path, Body
+from fastapi import FastAPI, Request, Query, Path
 from pydantic import BaseModel, Required
 
+from models import User, Gender, Role
+
 app = FastAPI()
+
+db: List[User] = [
+    User(
+        id=uuid4(),
+        first_name="Mahadi",
+        last_name="Hassan",
+        gender=Gender.male,
+        roles=[Role.admin],
+    ),
+
+    User(
+        id=uuid4(),
+        first_name="Shoma",
+        last_name="Haq",
+        gender=Gender.female,
+        roles=[Role.student, Role.user],
+    ),
+
+]
 
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/api/v1/users")
+async def fetch_users():
+    return db
+
+
+@app.post("/api/v1/users")
+async def register_user(user: User):
+    db.append(user)
+    return {"id": user.id}
 
 
 @app.get("/hello/{name}")
@@ -126,13 +160,12 @@ async def update_item(
         results.update({"item": item})
     return results
 
-
-class User(BaseModel):
-    username: str
-    full_name: str | None = None
-
-
-@app.put("/items5/{item_id}")
-async def update_item(item_id: int, item: Item, user: User, importance: int = Body()):
-    results = {"item_id": item_id, "item": item, "user": user, "importance": importance}
-    return results
+# class User(BaseModel):
+#     username: str
+#     full_name: str | None = None
+#
+#
+# @app.put("/items5/{item_id}")
+# async def update_item(item_id: int, item: Item, user: User, importance: int = Body()):
+#     results = {"item_id": item_id, "item": item, "user": user, "importance": importance}
+#     return results

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 from typing import List
 from uuid import uuid4
@@ -17,7 +19,6 @@ db: List[User] = [
         gender=Gender.male,
         roles=[Role.admin],
     ),
-
     User(
         id=uuid4(),
         first_name="Shoma",
@@ -25,7 +26,6 @@ db: List[User] = [
         gender=Gender.female,
         roles=[Role.student, Role.user],
     ),
-
 ]
 
 
@@ -105,7 +105,9 @@ async def create_item(item_id: int, item: Item, q: str | None = None):
 
 
 @app.get("/items/")
-async def read_item(skip: int = 0, limit: int = 10, q: str | None = Query(default=None, max_length=5)):
+async def read_item(
+    skip: int = 0, limit: int = 10, q: str | None = Query(default=None, max_length=5)
+):
     results = fake_items_db[0]
     if q:
         results.update({"q": q})
@@ -121,9 +123,7 @@ async def read_item(item_id: str, q: str | None = None):
 
 
 @app.get("/items_2/")
-async def read_items(
-        q: str = Query(default=Required, min_length=3, max_length=50)
-):
+async def read_items(q: str = Query(default=Required, min_length=3, max_length=50)):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
         results.update({"q": q})
@@ -132,13 +132,14 @@ async def read_items(
 
 @app.get("/items3/")
 async def read_items(
-        *,
-        q: str | None = Query(
-            default=None,
-            title="Query string",
-            description="Query string for the items to search in the database that have a good match",
-            min_length=3,
-        )
+    *,
+    q: str
+    | None = Query(
+        default=None,
+        title="Query string",
+        description="Query string for the items to search in the database that have a good match",
+        min_length=3,
+    ),
 ):
     results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
     if q:
@@ -148,10 +149,10 @@ async def read_items(
 
 @app.put("/items4/{item_id}")
 async def update_item(
-        *,
-        item_id: int = Path(title="The ID of the item to get", ge=0, le=1000),
-        q: str | None = None,
-        item: Item | None = None,
+    *,
+    item_id: int = Path(title="The ID of the item to get", ge=0, le=1000),
+    q: str | None = None,
+    item: Item | None = None,
 ):
     results = {"item_id": item_id}
     if q:
@@ -159,6 +160,7 @@ async def update_item(
     if item:
         results.update({"item": item})
     return results
+
 
 # class User(BaseModel):
 #     username: str

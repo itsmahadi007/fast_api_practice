@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="Black">
+    <option name="executionMode" value="BINARY" />
+    <option name="pathToExecutable" value="/Library/Frameworks/Python.framework/Versions/3.10/bin/black" />
+    <option name="sdkUUID" value="b7b2b2f4-a15a-4fd8-a6f5-d1cb5fb64b90" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (fastApiProject-learning)" project-jdk-type="Python SDK" />
 </project>
